@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>eBPF Sentinel | Dashboard</title>
+    <meta name="description" content="Real-time eBPF system observability dashboard — syscall tracing, network monitoring, and anomaly detection.">
+    <link rel="stylesheet" href="/static/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <div class="glass-container">
+        <header>
+            <div class="logo">
+                <span class="shield">🛡️</span>
+                <h1>eBPF <span class="accent">Sentinel</span></h1>
+            </div>
+            <div class="header-right">
+                <div class="last-updated-badge">
+                    <span class="update-icon">⟳</span>
+                    <span id="last-update">--:--:--</span>
+                </div>
+                <div class="status connected">
+                    <span class="pulse"></span> Connecting...
+                </div>
+            </div>
+        </header>
+
+        <main class="dashboard-grid">
+            <!-- Left Column: Metrics & Alerts -->
+            <div class="column">
+                <section class="card stats-panel" id="overview-panel">
+                    <h3><span class="icon">📊</span> Overview</h3>
+                    <div class="stats-grid">
+                        <div class="stat-item">
+                            <span class="label">Total Syscalls</span>
+                            <span id="stat-syscalls" class="value">0</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="label">Net Events</span>
+                            <span id="stat-net" class="value">0</span>
+                        </div>
+                        <div class="stat-item danger">
+                            <span class="label">Anomalies</span>
+                            <span id="stat-alerts" class="value">0</span>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="card alerts-panel" id="alerts-panel">
+                    <h3><span class="icon">⚠️</span> Security Anomalies</h3>
+                    <div id="alerts-list" class="log-container">
+                        <div class="empty-state">No anomalies detected.</div>
+                    </div>
+                </section>
+
+                <section class="card chart-panel" id="syscall-chart-panel">
+                    <h3><span class="icon">📈</span> Syscall Distribution</h3>
+                    <canvas id="syscallChart"></canvas>
+                </section>
+
+                <section class="card chart-panel" id="cpu-chart-panel">
+                    <h3><span class="icon">⏱️</span> CPU Scheduler Latency</h3>
+                    <canvas id="cpuLatChart"></canvas>
+                </section>
+
+                <section class="card stats-panel" id="bandwidth-panel">
+                    <h3><span class="icon">🌐</span> Top Bandwidth (TX)</h3>
+                    <div id="top-net-list" class="mini-table">
+                        <div class="empty-state">Calculating...</div>
+                    </div>
+                </section>
+            </div>
+
+            <!-- Right Column: Live Logs -->
+            <div class="column">
+                <section class="card logs-panel" id="logs-panel">
+                    <div class="panel-header">
+                        <h3><span class="icon">📜</span> System Activity Log</h3>
+                        <div class="filters">
+                            <button class="filter-btn active" data-filter="all" id="filter-all">All</button>
+                            <button class="filter-btn" data-filter="syscall" id="filter-syscall">Syscalls</button>
+                            <button class="filter-btn" data-filter="net" id="filter-net">Network</button>
+                        </div>
+                    </div>
+                    <div id="activity-log" class="log-container mono">
+                        <!-- Entries added dynamically by app.js -->
+                    </div>
+                </section>
+            </div>
+        </main>
+
+        <footer class="dashboard-footer">
+            <span class="footer-text">HTTP Polling • 1s interval • No WebSocket required</span>
+        </footer>
+    </div>
+
+    <script src="/static/app.js"></script>
+</body>
+</html>
